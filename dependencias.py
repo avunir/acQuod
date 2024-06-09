@@ -54,11 +54,7 @@ def comprobar_y_crear_carpetas(rutas = ['./info/','./evidencias/']):
     for ruta in rutas:
         if not os.path.exists(ruta):
             os.makedirs(ruta)
-            #print(Fore.GREEN + f"Carpeta '{ruta}' creada.")
-        #else:
-            #print(Fore.GREEN + f"Carpeta '{ruta}' ya existe.")
 
-#def comprobar_contenido_y_eliminar(rutas =  ['./info/','./evidencias/']):
 def comprobar_contenido_y_eliminar(rutas =  ['./info/','./evidencias/', '/mnt/forense*']):
     #Comprueba si las carpetas tienen contenido y ofrece la opción de eliminar su contenido.    
     for ruta in rutas:

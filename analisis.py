@@ -7,25 +7,17 @@ from utils import obtener_disco_seleccionado, ejecutar_comando, esperar_pulsacio
 def mostrar_informacion_hardware():
     #Muestra información de hardware utilizando comandos de Linux.
     print(Fore.GREEN + Style.BRIGHT + "\nInformación de Hardware:")
-    print(Fore.CYAN + "\nInformación de Bloques de Dispositivos:")
-    #ejecutar_script_linux("./scripts/lsblk.sh " + str(dispositivo))
-    #primer=ejecutar_comando(["./scripts/lsblk.sh", obtener_disco_seleccionado()])
-    #print(primer)
-    #print(Fore.CYAN + "\nInformación del dispositivo:")
-    #ejecutar_script_linux("./scripts/partx.sh" + str(dispositivo))
-    segun=ejecutar_comando(["./scripts/info_hard.sh", obtener_disco_seleccionado()])
-    print(segun)
+    print(Fore.CYAN + "\nInformación de Bloques de Dispositivos:")    
+    comand=ejecutar_comando(["./scripts/info_hard.sh", obtener_disco_seleccionado()])
+    print(comand)
 
 def mostrar_informacion_software():
-    # Función ficticia para el ejemplo
     print(Fore.CYAN + "\nInformación Software:")
     # Obtener el nombre del sistema operativo
     sistema_operativo = platform.uname().system
-    print(f"El sistema operativo es: {sistema_operativo}")
-
-    #print(Fore.CYAN + "\nInformación del dispositivo (blkid):")
-    tercer=ejecutar_comando(["./scripts/info_soft.sh", obtener_disco_seleccionado()])
-    print(tercer)
+    print(f"El sistema operativo es: {sistema_operativo}")    
+    comand=ejecutar_comando(["./scripts/info_soft.sh", obtener_disco_seleccionado()])
+    print(comand)
 
 def mostrar_informacion_cifrado():
     
@@ -86,12 +78,9 @@ def mostrar_informacion_cifrado():
 
     # Comprobamos cifrado de particiones
     print(Fore.CYAN + "\nInformación de Cifra:")
-    #ejecutar_script_linux("./scripts/cripto.sh"  + str(dispositivo))
-    tercer=ejecutar_comando(["./scripts/info_cript.sh", obtener_disco_seleccionado()])
-    print(tercer)
-    
-    opcion = input(Fore.CYAN + "Para más información del cifrado pulse B(Bitlocker) - L(LUKS) - F(FileVault) o ENTER para continuar: ")
-    
+    comand=ejecutar_comando(["./scripts/info_cript.sh", obtener_disco_seleccionado()])
+    print(comand)    
+    opcion = input(Fore.CYAN + "Para más información del cifrado pulse B(Bitlocker) - L(LUKS) - F(FileVault) o ENTER para continuar: ")    
     if opcion == "B":
         print(Fore.CYAN + Bitlocker_info)
         esperar_pulsacion_tecla()

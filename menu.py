@@ -1,5 +1,4 @@
 from colorama import Fore, Style
-
 from dependencias import comprobar_contenido_y_eliminar, comprobar_y_crear_carpetas, establecer_fecha
 from utils import ejecutar_comando, obtener_disco_seleccionado, limpiar_pantalla, esperar_pulsacion_tecla, seleccionar_dispositivo
 from analisis import mostrar_informacion_hardware, mostrar_informacion_software, mostrar_informacion_cifrado
@@ -42,7 +41,6 @@ def menu_principal():
             mostrar_informacion_hardware() 
             mostrar_informacion_software()
             mostrar_informacion_cifrado()
-            #esperar_pulsacion_tecla()
             limpiar_pantalla()
         elif opcion == "2":
             mostrar_informacion_hardware()

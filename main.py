@@ -8,10 +8,9 @@ from colorama import init, Fore, Style
 # Inicializa colorama
 init(autoreset=True)
 
-# Llamada a la función para mostrar el menú
 if __name__ == "__main__":
     
-    """ Comprobamos dependencias necesarias para ejecutar el programa """
+    #Comprobamos dependencias necesarias para ejecutar el programa
     # Lista de paquetes de Ubuntu y Python a comprobar
     ubuntu_packages = ['gddrescue', 'util-linux', 'vim-common', 'dislocker']  # Paquetes de Ubuntu
     python_packages = ['numpy', 'os']  # Paquetes de Python
@@ -19,12 +18,13 @@ if __name__ == "__main__":
     
     #Comprobamos que el sistema operativo bloquea el acceso a los dispositivos externos
     montaje()
-    #iniciamos el programa
+    #Comprobamos que las carpetas de trabajo existen
     limpiar_pantalla()
     comprobar_y_crear_carpetas()
+    #Inicializamos la fecha
     establecer_fecha()
     
-    #Permitimos al usuario elegir el dispositivo
+    #Ofrecemos al usuario elegir el dispositivo
     dispositivo = seleccionar_dispositivo()
     
     #iniciamos el menu principal

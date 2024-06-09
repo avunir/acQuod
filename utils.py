@@ -1,9 +1,8 @@
 import subprocess
 import os,sys
-
+import termios
+import tty
 from colorama import init, Fore, Style
-
-# Definición de funciones
 
 #Función para limpiar la pantalla
 def limpiar_pantalla():
@@ -31,30 +30,23 @@ def seleccionar_dispositivo():
     """ Listamos los discos conectados"""
     print(Fore.YELLOW + Style.BRIGHT + "\nDiscos Conectados al sistema")
     print("Seleccione un dispositivo para analizar:")
-    #for i, linea in enumerate(dispositivos_conectados, 1):
-    #    print(f"{i}. {linea}")
-
+    
     # Iterar sobre la lista de líneas y mostrar el número de línea y el contenido
     for i, linea in enumerate(dispositivos_conectados, 1):        
         dsistema = ejecutar_comando(['./scripts/disco_sistema.sh', str(linea)])        
         dsize = ejecutar_comando(["./scripts/disk_size.sh", linea])
-        
-        
-        
         if dsistema != None:
             print(f"{i}. {linea} " + "(Disco del Sistema) " + str(dsize))
         else:
             print(f"{i}. {linea} " + str(dsize))
-    
-        
+
     opcion = input(Fore.YELLOW + Style.BRIGHT + "Seleccione un dispositivo para analizar: ")    
     # Validar la entrada del usuario
     while not opcion.isdigit() or int(opcion) < 1 or int(opcion) > len(dispositivos_conectados):
         print("Opción no válida. Por favor, ingrese un número válido.")
         opcion = input("Ingrese el número de la opción que desea seleccionar: ")
 
-    # Obtener el contenido correspondiente a la opción seleccionada
-    
+    # Obtener el contenido correspondiente a la opción seleccionada    
     dispositivo_seleccionado = dispositivos_conectados[int(opcion) - 1]
     with open('./info/' + str(obtener_fecha()) + '/disco_seleccionado.txt', 'w') as file:
         file.write(dispositivo_seleccionado)
@@ -71,11 +63,7 @@ def obtener_disco_seleccionado():
 
 #Funcion para esperar pulsación de tecla
 def esperar_pulsacion_tecla():
-    """
-    Espera una pulsación de tecla.
-    """    
-    import termios
-    import tty
+    #Espera una pulsación de tecla.
     print(Fore.LIGHTGREEN_EX + "Presiona cualquier tecla para continuar...")
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
@@ -87,35 +75,19 @@ def esperar_pulsacion_tecla():
 
 #Función para ejecutar un comando en la terminal
 def ejecutar_comando(comando):
-    """
-    Ejecuta un comando en la terminal y devuelve su salida.
-    
-    :param comando: Lista que contiene el comando y sus argumentos.
-    :return: Salida del comando como una cadena de texto.
-    """
+    #Ejecuta un comando en la terminal y devuelve su salida.
     try:
         resultado = subprocess.run(comando, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         if resultado.stdout != '\n':
             return resultado.stdout
     except subprocess.CalledProcessError as e:
-        #return f"Error al ejecutar {comando}: {e.stderr}"
         return None
 
 #función para ejecutar un script Bash
 def ejecutar_script_linux(ruta_script):
-    """
-    Ejecuta un script de shell desde Python.
-
-    Args:
-        ruta_script (str): La ruta al script de shell que se ejecutará.
-    """
+    #Ejecuta un script de shell desde Python.
     try:
         resultado = subprocess.run([ruta_script], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         print(f" \n{resultado.stdout}")
     except subprocess.CalledProcessError as e:
         print(f"Error al ejecutar el script: {e.stderr}")
-
-def adquirir_dispositivos():
-    # Función ficticia para el ejemplo
-    print(Fore.GREEN + "Adquiriendo dispositivos...")
-
