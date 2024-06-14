@@ -2,7 +2,6 @@
 
 #Colores
 checkV="\e[32m[**]\e[0m"
-checkA="\e[33m[->]\e[0m"
 checkR="\e[31m[!!]\e[0m"
 
 #seleccionamos la fecha
@@ -15,14 +14,14 @@ sudo lsblk -l $disco | grep part|awk '{print $1}'|column -t|uniq > ./info/$start
 while read linea
 do
     echo -e ""
-    echo -e "$checkV Mostrando información de la particion: /dev/$linea:"
+    echo -e "$checkV Mostrando información de la particion: /dev/$linea"
 
     #COMPROBAMOS BITLOCKER    
     cadena=$(sudo hexdump -n 10485760 -C /dev/$linea |grep -i "fve-")
     retval=$? 
     if [ $retval -eq 0 ];
     then
-        echo -e "$checkR IDENTIFICADA PARTICIÓN CIFRADA CON BITLOCKER Y TPM"
+        echo -e "$checkR IDENTIFICADA PARTICIÓN CIFRADA CON BITLOCKER"
         sudo dislocker-metadata -V /dev/$linea > ./info/$start_time/cifra_identificada.txt
         sudo dislocker-metadata -V /dev/$linea | grep -e Signature -e Version -e VMK -e PK -e state -e Encryption -e Recovery
         continue
