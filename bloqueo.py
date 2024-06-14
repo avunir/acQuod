@@ -1,4 +1,4 @@
-from colorama import init, Fore, Style
+from colorama import Fore, Style
 import subprocess
 
 def obtener_estado_automontaje():
@@ -31,15 +31,12 @@ def cambiar_estado_automontaje(estado):
         print(f"Error al cambiar el estado del automontaje: {e}")
 
 def montaje():
-    estado_automontaje, estado_automontaje_open = obtener_estado_automontaje()
-        
+    estado_automontaje, estado_automontaje_open = obtener_estado_automontaje()        
     if estado_automontaje == "false" and estado_automontaje_open == "false":
         return
-
+    
     print(f"Estado actual del automontaje: {estado_automontaje} y {estado_automontaje_open}")
-
     accion = input("¿Desea habilitar (h) o deshabilitar (d) el automontaje de dispositivos externos? (h/d): ").strip().lower()
-
     if accion == 'h':
         cambiar_estado_automontaje('true')
     elif accion == 'd':

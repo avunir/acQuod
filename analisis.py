@@ -1,5 +1,4 @@
 import platform
-
 from colorama import Fore, Style
 from utils import obtener_disco_seleccionado, ejecutar_comando, esperar_pulsacion_tecla
 
@@ -12,10 +11,11 @@ def mostrar_informacion_hardware():
     print(comand)
 
 def mostrar_informacion_software():
-    print(Fore.CYAN + "\nInformación Software:")
+    print(Fore.GREEN + Style.BRIGHT + "\nInformación de Software:")
     # Obtener el nombre del sistema operativo
-    sistema_operativo = platform.uname().system
-    print(f"El sistema operativo es: {sistema_operativo}")    
+    #sistema_operativo = platform.uname().system
+    #print(f"El sistema operativo es: {sistema_operativo}") 
+        
     comand=ejecutar_comando(["./scripts/info_soft.sh", obtener_disco_seleccionado()])
     print(comand)
 
@@ -77,7 +77,7 @@ def mostrar_informacion_cifrado():
     """
 
     # Comprobamos cifrado de particiones
-    print(Fore.CYAN + "\nInformación de Cifra:")
+    print(Fore.GREEN + Style.BRIGHT + "\nInformación de Cifra:")
     comand=ejecutar_comando(["./scripts/info_cript.sh", obtener_disco_seleccionado()])
     print(comand)    
     opcion = input(Fore.CYAN + "Para más información del cifrado pulse B(Bitlocker) - L(LUKS) - F(FileVault) o ENTER para continuar: ")    

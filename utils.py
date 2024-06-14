@@ -2,17 +2,12 @@ import subprocess
 import os,sys
 import termios
 import tty
-from colorama import init, Fore, Style
+from colorama import Fore, Style
+from dependencias import obtener_fecha
 
 #Función para limpiar la pantalla
 def limpiar_pantalla():
     os.system('clear')
-
-# Obtener la fecha y hora actual
-def obtener_fecha():
-    with open('./info/fecha.txt', 'r') as archivo:
-        fecha_actual = archivo.readline()
-    return str(fecha_actual)
 
 #Función para seleccionar el dispositivo por parte del usuario
 def seleccionar_dispositivo():
@@ -91,3 +86,41 @@ def ejecutar_script_linux(ruta_script):
         print(f" \n{resultado.stdout}")
     except subprocess.CalledProcessError as e:
         print(f"Error al ejecutar el script: {e.stderr}")
+
+def mostrar_contenido_carpeta(rutas = [
+    "./info/",
+    "./evidencias/"
+    ]):
+    #Muestra el contenido de las carpetas especificadas.
+    for ruta in rutas:
+        if os.path.exists(ruta):
+            contenido = os.listdir(ruta)
+            if contenido:
+                print(f"\nContenido de la carpeta '{ruta}':")
+                for item in contenido:
+                    item_path = os.path.join(ruta, item)
+                    if os.path.isfile(item_path):
+                        #mostrar_menu_archivo(item_path)
+                        mostrar_contenido_archivo(item_path)
+                    else:
+                        print(f"Directorio: {item}")
+            else:
+                print(f"\nLa carpeta '{ruta}' está vacía.")
+        else:
+            print(f"\nLa carpeta '{ruta}' no existe.")
+
+def mostrar_menu_archivo(ruta_archivo):
+    #Muestra un menú con el nombre del archivo antes de mostrar su contenido.
+    print(f"\n--- Menú: {os.path.basename(ruta_archivo)} ---")
+    #input("Presiona Enter para ver el contenido del archivo...")
+
+def mostrar_contenido_archivo(ruta_archivo):
+    #Muestra el contenido del archivo especificado.
+    print(f"\nContenido del archivo '{ruta_archivo}':")
+    with open(ruta_archivo, 'r') as archivo:
+        contenido = archivo.read()
+        print(contenido)
+    #print("\n--- Fin del contenido ---\n")
+
+if __name__ == "__main__":
+    limpiar_pantalla()

@@ -5,7 +5,6 @@ import shutil
 import datetime
 
 from colorama import init, Fore, Style
-from utils import esperar_pulsacion_tecla
 
 # Lista de paquetes de Ubuntu y Python a comprobar
 ubuntu_packages = ['gddrescue', 'util-linux', 'vim-common', 'dislocker']  # Paquetes de Ubuntu
@@ -17,6 +16,12 @@ def establecer_fecha():
     with open('./info/fecha.txt', 'w') as archivo:
         archivo.write(fecha_actual)
 
+# Obtener la fecha y hora actual
+def obtener_fecha():
+    with open('./info/fecha.txt', 'r') as archivo:
+        fecha_actual = archivo.readline()
+    return str(fecha_actual)
+
 def check_and_install_ubuntu_package(package):
     """
     Comprueba si un paquete de Ubuntu está instalado y lo instala si no lo está.
@@ -26,7 +31,7 @@ def check_and_install_ubuntu_package(package):
         print(Fore.GREEN + f"El paquete de Ubuntu '{package}' ya está instalado.")
     except subprocess.CalledProcessError:
         print(Fore.RED + f"El paquete de Ubuntu '{package}' no está instalado. Instalando...")
-        subprocess.check_call(['sudo', 'apt-get', 'install', '-y', package])
+        subprocess.check_call(['sudo', 'apt', 'install', package])
 
 def check_and_install_python_package(package):
     """
@@ -37,7 +42,7 @@ def check_and_install_python_package(package):
         print(Fore.GREEN + f"El paquete de Python '{package}' ya está instalado.")
     except ImportError:
         print(Fore.RED + f"El paquete de Python '{package}' no está instalado. Instalando...")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+        subprocess.check_call([sys.executable, "-m", "pip3", "install", package])
 
 def check_and_install_dependencies(ubuntu_packages, python_packages):
     """
@@ -76,7 +81,10 @@ def comprobar_contenido_y_eliminar(rutas =  ['./info/','./evidencias/', '/mnt/fo
                     print(f"Contenido de la carpeta '{ruta}' no eliminado.")
                     shutil.rmtree(ruta)
             else:
-                print(f"La carpeta '{ruta}' está vacía.")
+                #print(f"La carpeta '{ruta}' está vacía.")
                 shutil.rmtree(ruta)
         else:
             print(f"La carpeta '{ruta}' no existe.")
+
+if __name__ == "__main__":
+    establecer_fecha()
