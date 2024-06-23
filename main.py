@@ -1,7 +1,9 @@
-import os, datetime
+import datetime
 from colorama import init
-
-import dependencias, bloqueo, utils, menu
+from dependencias import check_and_install_dependencies, comprobar_y_crear_carpetas
+from utils import limpiar_pantalla, seleccionar_dispositivo
+from bloqueo import montaje
+from menu import menu_principal
 
 # Inicializa colorama
 init(autoreset=True)
@@ -10,30 +12,28 @@ if __name__ == "__main__":
     
     #Comprobamos dependencias necesarias para ejecutar el programa
     # Lista de paquetes de Ubuntu y Python a comprobar
-    ubuntu_packages = ['gddrescue', 'util-linux', 'vim-common', 'dislocker']  # Paquetes de Ubuntu
-    python_packages = ['shutil', 'platform']  # Paquetes de Python
-    dependencias.check_and_install_dependencies(ubuntu_packages, python_packages)
+    ubuntu_packages = ['gddrescue', 'util-linux', 'vim-common', 'dislocker', 'xxd', 'gddrescue']  # Paquetes de Ubuntu
+    python_packages = ['numpy', 'os']  # Paquetes de Python
+    check_and_install_dependencies(ubuntu_packages, python_packages)
     
-    #Inicializamos el contenido
-    rutas = ['./info/','./evidencias/']
-    #Comprueba si las carpetas en la lista existen, y si no, las crea.
-    for ruta in rutas:
-        if not os.path.exists(ruta):
-            os.makedirs(ruta)
+    #Comprobamos si las carpetas necesarias existen, y si no, las crea.
+    comprobar_y_crear_carpetas(['./info/','./evidencias/'])
     #Inicializamos la fecha
     fecha_actual = datetime.datetime.now().strftime('%Y-%m-%d')
     with open('./info/fecha.txt', 'w') as archivo:
         archivo.write(fecha_actual)
-    #comprobar_contenido_y_eliminar()
 
     #Comprobamos que el sistema operativo bloquea el acceso a los dispositivos externos
-    bloqueo.montaje()    
+    montaje()    
     
-    utils.limpiar_pantalla()
+    limpiar_pantalla()
     
     
     #Ofrecemos al usuario elegir el dispositivo
-    dispositivo = utils.seleccionar_dispositivo()
+    dispositivo = seleccionar_dispositivo()
+    #particiones = utils.listar_particiones(dispositivo)
+    #print(particiones)
+    #esperar_pulsacion_tecla()
     
     #iniciamos el menu principal
-    menu.menu_principal()
+    menu_principal()

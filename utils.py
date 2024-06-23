@@ -4,10 +4,23 @@ import termios
 import tty
 from colorama import Fore, Style
 from dependencias import obtener_fecha
+from dependencias import comprobar_y_crear_carpetas
 
 #Función para limpiar la pantalla
 def limpiar_pantalla():
     os.system('clear')
+
+#Funcion para esperar pulsación de tecla
+def esperar_pulsacion_tecla():
+    #Espera una pulsación de tecla.
+    print(Fore.LIGHTGREEN_EX + "Presiona cualquier tecla para continuar...")
+    fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(fd)
+    try:
+        tty.setraw(sys.stdin.fileno())
+        sys.stdin.read(1)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
 
 #Función para seleccionar el dispositivo por parte del usuario
 def seleccionar_dispositivo():
@@ -17,12 +30,13 @@ def seleccionar_dispositivo():
     print(Fore.GREEN + Style.BRIGHT + "\nCONECTE el dispopsitivo de almacenamiento que quiera analizar\n")
     print(Fore.GREEN + Style.BRIGHT + "\n=============================================================\n")
     esperar_pulsacion_tecla()
+    limpiar_pantalla()
     with open('./info/' + obtener_fecha() + '/discos_conectados.txt', 'r') as file:
         for line in file:
             dispositivos_conectados.append(line.strip().split()[0])
     
     # Mostrar el menú dinámico
-    """ Listamos los discos conectados"""
+    #Listamos los discos conectados
     print(Fore.YELLOW + Style.BRIGHT + "\nDiscos Conectados al sistema")
     print("Seleccione un dispositivo para analizar:")
     
@@ -46,6 +60,9 @@ def seleccionar_dispositivo():
     with open('./info/' + str(obtener_fecha()) + '/disco_seleccionado.txt', 'w') as file:
         file.write(dispositivo_seleccionado)
 
+    #Se crea la carpeta de la fecha dentro de la carpeta evidencias
+    comprobar_y_crear_carpetas(['./evidencias/' + str(obtener_fecha())])
+
     limpiar_pantalla()    
     
     return dispositivo_seleccionado
@@ -56,17 +73,27 @@ def obtener_disco_seleccionado():
         dispositivo = file.readline()
     return str(dispositivo)
 
-#Funcion para esperar pulsación de tecla
-def esperar_pulsacion_tecla():
-    #Espera una pulsación de tecla.
-    print(Fore.LIGHTGREEN_EX + "Presiona cualquier tecla para continuar...")
-    fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd)
+#Listar particiones del disco
+def listar_particiones(dispositivo):
+    dispositivo = dispositivo.replace('/dev/', '')
+    disco = dispositivo.replace('/dev/', '')
+    particiones = []
     try:
-        tty.setraw(sys.stdin.fileno())
-        sys.stdin.read(1)
-    finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        with open('/proc/partitions', 'r') as f:
+            for linea in f.readlines()[2:]:  # Saltamos las dos primeras líneas de encabezado
+                partes = linea.split()
+                if partes[3].startswith(disco) and partes[3] != dispositivo:
+                    particiones.append('/dev/' + str(partes[3]))
+            if particiones:
+                particiones.append('/dev/' + str(dispositivo))
+        return particiones
+    except FileNotFoundError:
+        print(f"Error: El fichero /proc/partitions no existe.")
+        return None
+    except Exception as e:
+        print(f"Error al leer el fichero /proc/partitions: {e}")
+        return None
+
 
 #Función para ejecutar un comando en la terminal
 def ejecutar_comando(comando):
@@ -89,7 +116,9 @@ def ejecutar_script_linux(ruta_script):
 
 def mostrar_contenido_carpeta(rutas = [
     "./info/",
-    "./evidencias/"
+    "./evidencias/",
+    #"./info/" + obtener_fecha() + "/",
+    #"./evidencias/" + obtener_fecha() + "/"
     ]):
     #Muestra el contenido de las carpetas especificadas.
     for ruta in rutas:
@@ -99,11 +128,13 @@ def mostrar_contenido_carpeta(rutas = [
                 print(f"\nContenido de la carpeta '{ruta}':")
                 for item in contenido:
                     item_path = os.path.join(ruta, item)
-                    if os.path.isfile(item_path):
+                    print(f"-- : {item}")
+                    '''if os.path.isfile(item_path):
                         #mostrar_menu_archivo(item_path)
                         mostrar_contenido_archivo(item_path)
                     else:
                         print(f"Directorio: {item}")
+                        '''
             else:
                 print(f"\nLa carpeta '{ruta}' está vacía.")
         else:

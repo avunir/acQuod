@@ -1,4 +1,4 @@
-import platform
+
 from colorama import Fore, Style
 from utils import obtener_disco_seleccionado, ejecutar_comando, esperar_pulsacion_tecla
 
@@ -80,7 +80,7 @@ def mostrar_informacion_cifrado():
     print(Fore.GREEN + Style.BRIGHT + "\nInformación de Cifra:")
     comand=ejecutar_comando(["./scripts/info_cript.sh", obtener_disco_seleccionado()])
     print(comand)    
-    opcion = input(Fore.CYAN + "Para más información del cifrado pulse B(Bitlocker) - L(LUKS) - F(FileVault) o ENTER para continuar: ")    
+    opcion = input(Fore.CYAN + "Para más información sobre el tipo de cifrado pulse B(Bitlocker) - L(LUKS) - F(FileVault) o ENTER para continuar: ")    
     if opcion == "B":
         print(Fore.CYAN + Bitlocker_info)
         esperar_pulsacion_tecla()

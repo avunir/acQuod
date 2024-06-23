@@ -6,13 +6,15 @@ import datetime
 
 from colorama import init, Fore, Style
 
-# Lista de paquetes de Ubuntu y Python a comprobar
-ubuntu_packages = ['gddrescue', 'util-linux', 'vim-common', 'dislocker']  # Paquetes de Ubuntu
-python_packages = ['numpy', 'os']  # Paquetes de Python
+def comprobar_y_crear_carpetas(rutas):
+    #Comprueba si las carpetas en la lista existen, y si no, las crea.
+    for ruta in rutas:
+        if not os.path.exists(ruta):
+            os.makedirs(ruta)
 
 # Obtener la fecha y hora actual
 def establecer_fecha():
-    fecha_actual = datetime.datetime.now().strftime('%Y-%m-%d')
+    fecha_actual = datetime.datetime.now().strftime('%Y-%m-%d')    
     with open('./info/fecha.txt', 'w') as archivo:
         archivo.write(fecha_actual)
 
@@ -54,19 +56,14 @@ def check_and_install_dependencies(ubuntu_packages, python_packages):
     for package in python_packages:
         check_and_install_python_package(package)
 
-def comprobar_y_crear_carpetas(rutas = ['./info/','./evidencias/']):
-    #Comprueba si las carpetas en la lista existen, y si no, las crea.
-    for ruta in rutas:
-        if not os.path.exists(ruta):
-            os.makedirs(ruta)
-
-def comprobar_contenido_y_eliminar(rutas =  ['./info/','./evidencias/', '/mnt/forense*']):
+def comprobar_contenido_y_eliminar(rutas =  ["./info/","./evidencias/"]):
     #Comprueba si las carpetas tienen contenido y ofrece la opción de eliminar su contenido.    
     for ruta in rutas:
         if os.path.exists(ruta):
             contenido = os.listdir(ruta)
             if contenido:
                 print(Fore.GREEN + f"La carpeta '{ruta}' tiene contenido.")
+                print(Fore.RED + f"Si continúa, se borrarán todos los datos de análisis anteriores.")
                 opcion = input(Fore.RED + f"¿Deseas eliminar el contenido de la carpeta '{ruta}'? (s/n): ").strip().lower()
                 if opcion == 's':
                     for item in contenido:
