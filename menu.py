@@ -41,9 +41,11 @@ def menu_principal():
         opcion = input(Fore.CYAN + "Selecciona una opción (1-6)(S salir): ")
 
         if opcion == "1":
-            #mostrar_informacion_hardware() 
-            #mostrar_informacion_software()
-            #mostrar_informacion_cifrado()
+            opcion = input(Fore.CYAN + "Pulse P para proceso completo o ENTER para solo adquirir: ")
+            if opcion == "P":
+                mostrar_informacion_hardware() 
+                mostrar_informacion_software()
+                mostrar_informacion_cifrado()
             adquirir_particiones()
             limpiar_pantalla()
         elif opcion == "2":
